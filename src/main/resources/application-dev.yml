@@ -1,7 +1,11 @@
 #jdbc
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.0.1:3306/test
     username: root
     password: root
+
+logging:
+  level:
+    com.wormchaos.dao: DEBUG
