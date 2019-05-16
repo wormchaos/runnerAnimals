@@ -17,4 +17,9 @@ public class User {
      */
     private Long userId;
 
+    /**
+     * 微信openId
+     */
+    private String openId;
+
 }
