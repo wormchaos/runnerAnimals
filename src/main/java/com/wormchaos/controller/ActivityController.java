@@ -1,5 +1,12 @@
 package com.wormchaos.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.wormchaos.dto.req.JoinActivityReq;
+import com.wormchaos.dto.rsp.ActivityRsp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,14 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ActivityController {
 
+    private Logger LOGGER = LoggerFactory.getLogger(ActivityController.class);
+
     /**
      * 加入活动
      * @return
      */
     @RequestMapping(value = "joinActivity")
-    public String joinActivity() {
+    public String joinActivity(@RequestBody JoinActivityReq req) {
         // 校验地址有效性
         // 记录用户信息
+        LOGGER.info("joinActivity, req {}", JSONObject.toJSONString(req));
         return "test";
     }
 
@@ -25,7 +35,10 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "getActivityList")
-    public String getActivityList() {
-        return "test";
+    public ActivityRsp getActivityList() {
+        ActivityRsp rsp = new ActivityRsp();
+        rsp.setTitle("test");
+        rsp.setDesc("test");
+        return rsp;
     }
 }
