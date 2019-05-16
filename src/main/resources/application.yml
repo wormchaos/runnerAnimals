@@ -1,0 +1,8 @@
+#test
+test: test
+
+#properties
+spring:
+  profiles:
+    #active: @spring.profile.active@
+    active: dev
