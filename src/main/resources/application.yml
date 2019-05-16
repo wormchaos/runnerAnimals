@@ -10,4 +10,5 @@ mybatis:
 #  config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mappers/*Mapper.xml
   type-aliases-package: com.wormchaos.entity
-
+  configuration:
+    map-underscore-to-camel-case: true

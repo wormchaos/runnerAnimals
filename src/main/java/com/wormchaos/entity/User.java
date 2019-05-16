@@ -9,7 +9,11 @@ import lombok.Data;
 public class User {
 
     /**
-     * 用户id
+     * 用户手机号
+     */
+    private String phone;
+    /**
+     * 用户ID
      */
     private Long userId;
 
