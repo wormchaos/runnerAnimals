@@ -4,11 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.wormchaos.dto.req.JoinActivityReq;
 import com.wormchaos.dto.rsp.ActivityRsp;
+import com.wormchaos.service.ActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by wormchaos on 2019-5-16.
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActivityController {
 
     private Logger LOGGER = LoggerFactory.getLogger(ActivityController.class);
+
+    @Resource
+    private ActivityService activityService;
 
     /**
      * 加入活动
@@ -35,10 +42,9 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "getActivityList")
-    public ActivityRsp getActivityList() {
-        ActivityRsp rsp = new ActivityRsp();
-        rsp.setTitle("test");
-        rsp.setDesc("test");
+    public List<ActivityRsp> getActivityList() {
+        Long userId = 11L;
+        List<ActivityRsp> rsp = activityService.getActivityList(userId);
         return rsp;
     }
 }

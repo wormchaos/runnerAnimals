@@ -27,15 +27,15 @@ public class Activity {
     /**
      * 活动开始时间
      */
-    private Integer activityBeginTime;
+    private String activityBeginTime;
 
     /**
      * 活动结束时间
      */
-    private Integer activityEndTime;
+    private String activityEndTime;
 
     /**
      * 活动实际结束时间
      */
-    private Integer activityAbortTime;
+    private String activityAbortTime;
 }
