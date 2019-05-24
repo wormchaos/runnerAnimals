@@ -5,6 +5,10 @@ import org.springframework.cglib.core.ReflectUtils;
 
 import javax.persistence.Table;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -43,11 +47,52 @@ public class BaseProvider<T> {
         }}.toString();
     }
 
+    /**
+     * sql-查询全部列表
+     * @return
+     */
     public String getAll() {
         // 初始化参数
         initTable();
         SQL sql = SELECT_FROM();
         return sql.toString();
+    }
+
+    /**
+     * sql-插入
+     * @param t
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
+     */
+    public String insert(final T t) throws IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+        initTable();
+        // 设置默认值
+        SQL sql = INSERT();
+        return sql.toString();
+    }
+
+    private SQL INSERT() {
+        SQL sql = new SQL() {
+            {
+                INSERT_INTO(tableName);
+                PropertyDescriptor[] propDescriptors = ReflectUtils.getBeanSetters(modelClazz);
+                for (PropertyDescriptor propertyDescriptor : propDescriptors) {
+                    String name = propertyDescriptor.getName();
+                    String columnName = convertColumnName(name);
+
+                    // 过滤不允许更新的字段
+                    if (null == name) {
+                        continue;
+                    }
+                    VALUES(columnName, "#{" + name + "}");
+
+                }
+
+            }
+        };
+        return sql;
     }
 
     /**
@@ -72,8 +117,8 @@ public class BaseProvider<T> {
         return new SQL() {
             {
                 for (PropertyDescriptor propertyDescriptor : propDescriptors) {
-                    String name = convertColumnName(propertyDescriptor.getName());
-                    SELECT(name);
+                    String columnName = convertColumnName(propertyDescriptor.getName());
+                    SELECT(columnName);
                 }
                 FROM(tableName);
             }
@@ -95,6 +140,9 @@ public class BaseProvider<T> {
 
 
     private String convertColumnName(String name) {
+        if(null == name) {
+            return null;
+        }
         return name.replaceAll("([A-Z])", "_$0").toUpperCase();
     }
 }

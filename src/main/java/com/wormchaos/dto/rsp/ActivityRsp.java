@@ -16,6 +16,16 @@ public class ActivityRsp implements Serializable {
     private Long activityId;
 
     /**
+     * 发起人id
+     */
+    private Long adminUserId;
+
+    /**
+     * 发起人昵称
+     */
+    private String adminUserName;
+
+    /**
      * 标题
      */
     private String title;

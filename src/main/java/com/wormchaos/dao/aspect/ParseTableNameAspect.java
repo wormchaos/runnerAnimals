@@ -28,7 +28,7 @@ public class ParseTableNameAspect {
     public Object invoke(ProceedingJoinPoint proceedingJoinPoint)
             throws Throwable {
         parseTableName(proceedingJoinPoint);
-        Object o =  proceedingJoinPoint.proceed();
+        Object o = proceedingJoinPoint.proceed();
         BaseProvider.threadLocalRemove();
 
         return o;
@@ -39,10 +39,10 @@ public class ParseTableNameAspect {
             throws NoSuchFieldException, IllegalAccessException,
             ClassNotFoundException {
         // 将modelClass添加到线程变量
-        if(proceedingJoinPoint.getArgs()!=null
-                &&proceedingJoinPoint.getArgs().length>0){
+        if (proceedingJoinPoint.getArgs() != null
+                && proceedingJoinPoint.getArgs().length > 0) {
             BaseProvider.setModelClass(proceedingJoinPoint.getArgs()[0].getClass());
-        }else{
+        } else {
             // 获取代理目标对象
             Field h = Proxy.class.getDeclaredField("h");
             h.setAccessible(true);
@@ -56,13 +56,13 @@ public class ParseTableNameAspect {
             Type[] types = cl.getGenericInterfaces();
             for (Type t : types) {
                 // 只针对接口类型必须是BaseDao的
-                ParameterizedType parameterizedType =  (ParameterizedType) t;
-                if(BaseDao.class.getClass().getName().equals(parameterizedType.getRawType().getClass().getName())){
+                ParameterizedType parameterizedType = (ParameterizedType) t;
+                if (BaseDao.class.getClass().getName().equals(parameterizedType.getRawType().getClass().getName())) {
                     // 获取泛型类型
                     Type[] temp = parameterizedType.getActualTypeArguments();
                     for (Type c : temp) {
                         modelName = ((Class) c).getName();
-                        LOGGER.info("当前操作实体对象:{}",modelName);
+                        LOGGER.info("当前操作实体对象:{}", modelName);
                     }
                     break;
                 }

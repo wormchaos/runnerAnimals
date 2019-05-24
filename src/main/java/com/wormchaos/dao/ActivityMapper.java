@@ -1,15 +1,12 @@
 package com.wormchaos.dao;
 
+import com.wormchaos.dao.utils.BaseDao;
 import com.wormchaos.entity.Activity;
-import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
 
 /**
  * Created by wormchaos on 2019-5-23.
  */
-public interface ActivityMapper {
+public interface ActivityMapper extends BaseDao<Activity> {
 
-    @Select("select * from t_activity")
-    List<Activity> findAll();
 }

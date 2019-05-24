@@ -1,5 +1,6 @@
 package com.wormchaos.service;
 
+import com.wormchaos.dto.req.AddActivityReq;
 import com.wormchaos.dto.rsp.ActivityRsp;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface ActivityService {
      * @return
      */
     List<ActivityRsp> getActivityList(Long userId);
+
+    /**
+     * 添加活动
+     * @param req
+     */
+    void addActivity(Long userId, AddActivityReq req);
 }
