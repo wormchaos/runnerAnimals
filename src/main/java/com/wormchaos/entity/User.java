@@ -2,10 +2,13 @@ package com.wormchaos.entity;
 
 import lombok.Data;
 
+import javax.persistence.Table;
+
 /**
  * Created by wormchaos on 2019-5-16.
  */
 @Data
+@Table(name = "t_user")
 public class User {
 
     /**

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by wormchaos on 2019-5-16.
@@ -25,6 +26,16 @@ public class UserController {
     public String getUserInfo() {
         Long userId = 17900684L;
         User user = userService.getUser(userId);
+        return JSONObject.toJSONString(user);
+    }
+
+    /**
+     * 获取用户权限
+     * @return
+     */
+    @RequestMapping(value = "getUserList")
+    public String getUserList() {
+        List<User> user = userService.getUserList();
         return JSONObject.toJSONString(user);
     }
 
