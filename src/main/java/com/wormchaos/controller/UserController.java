@@ -3,6 +3,7 @@ package com.wormchaos.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by wormchaos on 2019-5-16.
  */
 @RestController
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     private UserService userService;
@@ -22,15 +23,15 @@ public class UserController {
      * 获取用户权限
      * @return
      */
-    @RequestMapping(value = "getUserInfo")
+    @GetMapping
     public String getUserInfo() {
-        Long userId = 17900684L;
+        Long userId = getUserId();
         User user = userService.getUser(userId);
         return JSONObject.toJSONString(user);
     }
 
     /**
-     * 获取用户权限
+     * 获取用户列表
      * @return
      */
     @RequestMapping(value = "getUserList")
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     /**
-     * 获取用户权限
+     * 认证
      * @return
      */
     @RequestMapping(value = "authorize")

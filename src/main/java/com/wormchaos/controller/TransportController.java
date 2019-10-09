@@ -39,4 +39,13 @@ public class TransportController {
         return "test";
     }
 
+    /**
+     * 导出传递列表
+     * @return
+     */
+    @RequestMapping(value = "exportExcel")
+    public String exportExcel() {
+        return "test";
+    }
+
 }
