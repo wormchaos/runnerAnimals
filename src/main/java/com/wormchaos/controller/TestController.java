@@ -1,5 +1,7 @@
 package com.wormchaos.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,8 @@ public class TestController {
     @Value("${test}")
     private String test;
 
+    Logger LOGGER = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+
 //    @Value("${spring.profile.active}")
 //    private String version;
 
@@ -21,6 +25,7 @@ public class TestController {
 
     @RequestMapping(value = "test")
     public String test() {
+        LOGGER.info("logger data test:{}", url);
         return url;
     }
 
