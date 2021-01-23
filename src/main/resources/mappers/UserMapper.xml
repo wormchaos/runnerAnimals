@@ -4,7 +4,17 @@
     <resultMap id="getMap" type="com.wormchaos.entity.User"/>
 
     <select id="getUserByUserId" parameterType="Long" resultMap="getMap">
-		SELECT * FROM t_user WHERE user_id = #{userId} limit 1
-	</select>
+        SELECT * FROM t_user WHERE user_id = #{userId} limit 1
+    </select>
+
+    <select id="getUserByOpenId" parameterType="String" resultMap="getMap">
+        SELECT * FROM t_user WHERE open_id = #{openId} limit 1
+    </select>
+
+    <select id="getRankOrderByForce" parameterType="String" resultType="Integer">
+        select count(1) + 1 from t_user where `force` > (
+        select `force` from t_user where open_id = #{openId}
+        )
+    </select>
 
 </mapper>

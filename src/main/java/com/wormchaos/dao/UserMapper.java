@@ -9,4 +9,8 @@ import com.wormchaos.entity.User;
 public interface UserMapper extends BaseDao<User> {
 
     User getUserByUserId(Long userId);
+
+    User getUserByOpenId(String openId);
+
+    Integer getRankOrderByForce(String openId);
 }

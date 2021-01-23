@@ -15,6 +15,7 @@ public class User {
      * 用户手机号
      */
     private String phone;
+
     /**
      * 用户ID
      */
@@ -24,5 +25,10 @@ public class User {
      * 微信openId
      */
     private String openId;
+
+    /**
+     * 兵种强度
+     */
+    private Integer force;
 
 }
