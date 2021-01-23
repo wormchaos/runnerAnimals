@@ -1,6 +1,7 @@
 package com.wormchaos.dao;
 
 import com.wormchaos.dao.utils.BaseDao;
+import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.entity.User;
 
 /**
@@ -13,4 +14,8 @@ public interface UserMapper extends BaseDao<User> {
     User getUserByOpenId(String openId);
 
     Integer getRankOrderByForce(String openId);
+
+    Integer updateInfo(User user);
+
+    Long getMaxUserId();
 }

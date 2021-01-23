@@ -1,6 +1,7 @@
 package com.wormchaos.service.impl;
 
 import com.wormchaos.dao.UserMapper;
+import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.SnailService;
@@ -18,15 +19,17 @@ public class SnailServiceImpl implements SnailService {
     private UserMapper userMapper;
     @Override
     public SnailUserRsp getUserInfo(String openId) {
+        SnailUserRsp rsp = new SnailUserRsp();
         User user = userMapper.getUserByOpenId(openId);
         if (null == user) {
-            return null;
+            rsp.setStatus(0);
+            return rsp;
         }
-        SnailUserRsp rsp = new SnailUserRsp();
         rsp.setStatus(1);
-        rsp.setForce(user.getForce());
+        rsp.setForce(user.getArmForce());
         // 查询排名
         rsp.setGroupRank(getRankOrderByForce(openId));
+        rsp.setNickname(user.getNickname());
         if (null != rsp.getGroupRank()) {
             if (rsp.getGroupRank() > 25) {
                 rsp.setGroupName("勘探组");
@@ -40,5 +43,26 @@ public class SnailServiceImpl implements SnailService {
     @Override
     public Integer getRankOrderByForce(String openId) {
         return userMapper.getRankOrderByForce(openId);
+    }
+
+    @Override
+    public void saveSnailUser(SaveSnailUser reqInfo, String openId) {
+        User user = userMapper.getUserByOpenId(openId);
+        if(null == user) {
+            user = new User();
+            user.setOpenId(openId);
+            user.setArmForce(reqInfo.getForce());
+            user.setNickname(reqInfo.getNickname());
+            user.setUserId(createUserId());
+            userMapper.insert(user);
+        } else {
+            user.setArmForce(reqInfo.getForce());
+            user.setNickname(reqInfo.getNickname());
+            userMapper.updateInfo(user);
+        }
+    }
+
+    private Long createUserId() {
+        return userMapper.getMaxUserId() + 1;
     }
 }

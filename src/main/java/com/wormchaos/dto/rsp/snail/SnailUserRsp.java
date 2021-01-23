@@ -17,6 +17,11 @@ public class SnailUserRsp implements Serializable {
     private Integer status;
 
     /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
      * 兵种强度
      */
     private Integer force;

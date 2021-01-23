@@ -11,10 +11,10 @@ import javax.persistence.Table;
 @Table(name = "t_user")
 public class User {
 
-    /**
-     * 用户手机号
-     */
-    private String phone;
+//    /**
+//     * 用户手机号
+//     */
+//    private String phone;
 
     /**
      * 用户ID
@@ -27,8 +27,13 @@ public class User {
     private String openId;
 
     /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
      * 兵种强度
      */
-    private Integer force;
+    private Integer armForce;
 
 }

@@ -1,7 +1,9 @@
 package com.wormchaos.controller;
 
+import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
 import com.wormchaos.service.SnailService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,7 @@ public class SnailController {
     private SnailService snailService;
 
     /**
-     * 查询瓶娘当前所在地
+     * 获取当前用户资料
      * @return
      */
     @RequestMapping(value = "getSnailUserStatus")
@@ -27,6 +29,18 @@ public class SnailController {
         SnailUserRsp user = snailService.getUserInfo(openId);
         // 已入库用户显示昵称以及物种分组
         return user;
+    }
+
+    /**
+     * 获取当前用户资料
+     * @return
+     */
+    @RequestMapping(value = "saveUser")
+    public String saveUser(@RequestBody SaveSnailUser user, @RequestParam(defaultValue = "a") String openId) {
+        // 判断是否已入库用户
+        snailService.saveSnailUser(user, openId);
+        // 已入库用户显示昵称以及物种分组
+        return "success";
     }
 
 }

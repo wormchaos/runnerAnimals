@@ -12,9 +12,17 @@
     </select>
 
     <select id="getRankOrderByForce" parameterType="String" resultType="Integer">
-        select count(1) + 1 from t_user where `force` > (
-        select `force` from t_user where open_id = #{openId}
+        select count(1) + 1 from t_user where `arm_force` > (
+        select `arm_force` from t_user where open_id = #{openId}
         )
+    </select>
+
+    <update id="updateInfo" parameterType="com.wormchaos.entity.User" >
+        update t_user set nickname = #{nickname}, `arm_force` = #{armForce} where open_id = #{openId}
+    </update>
+
+    <select id="getMaxUserId"  resultType="Long">
+        SELECT max(user_id) FROM t_user
     </select>
 
 </mapper>
