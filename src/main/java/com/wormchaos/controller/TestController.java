@@ -29,4 +29,12 @@ public class TestController {
         return url;
     }
 
+    @RequestMapping(value = "exception")
+    public String exception() {
+        int a = 1;
+        int b = 0;
+        int c = a / b;
+        return url;
+    }
+
 }
