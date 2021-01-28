@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wormchaos.dao.WxUserMapper">
+    <resultMap id="getMap" type="com.wormchaos.entity.WxUser"/>
+
+    <select id="findOpenIdByCode" parameterType="String" resultType="String">
+        SELECT open_id FROM t_wx_user WHERE code = #{code} limit 1
+    </select>
+
+    <update id="updateUser" >
+        update t_wx_user set code = #{code} where open_id = #{openId}
+    </update>
+
+    <select id="isExists" parameterType="String" resultType="Integer">
+        SELECT count(1) FROM t_wx_user WHERE open_id = #{openId}
+    </select>
+
+</mapper>

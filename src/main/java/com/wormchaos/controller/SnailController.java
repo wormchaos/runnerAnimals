@@ -28,9 +28,9 @@ public class SnailController {
      * @return
      */
     @RequestMapping(value = "getSnailUserStatus")
-    public BaseRsp<SnailUserRsp> getSnailUserStatus(@RequestParam(defaultValue = "a") String openId ) {
+    public BaseRsp<SnailUserRsp> getSnailUserStatus(@RequestParam String code) {
         // 判断是否已入库用户
-        SnailUserRsp user = snailService.getUserInfo(openId);
+        SnailUserRsp user = snailService.getUserInfo(code);
         // 已入库用户显示昵称以及物种分组
         BaseRsp result = new BaseRsp(user);
         return result;
@@ -41,9 +41,9 @@ public class SnailController {
      * @return
      */
     @RequestMapping(value = "saveUser")
-    public BaseRsp saveUser(@RequestBody SaveSnailUser user, @RequestParam(defaultValue = "a") String openId) {
+    public BaseRsp saveUser(@RequestBody SaveSnailUser user, @RequestParam String code) {
         // 判断是否已入库用户
-        snailService.saveSnailUser(user, openId);
+        snailService.saveSnailUser(user, code);
         // 已入库用户显示昵称以及物种分组
         return BaseRsp.SUCCESS;
     }

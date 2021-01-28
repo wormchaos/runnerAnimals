@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wormchaos.dao.SnailMapper">
+    <resultMap id="getMap" type="com.wormchaos.entity.Snail"/>
+
+    <select id="findByUserId" parameterType="Long" resultMap="getMap">
+        SELECT * FROM t_snail WHERE user_id = #{userId} limit 1
+    </select>
+
+    <update id="updateInfo" parameterType="com.wormchaos.entity.Snail" >
+        update t_snail set nickname = #{nickname}, `arm_force` = #{armForce} where user_id = #{userId}
+    </update>
+
+</mapper>

@@ -8,9 +8,9 @@ import com.wormchaos.dto.rsp.snail.SnailUserRsp;
  */
 public interface SnailService {
 
-    SnailUserRsp getUserInfo(String openId);
+    SnailUserRsp getUserInfo(String code);
 
     Integer getRankOrderByForce(String openId);
 
-    void saveSnailUser(SaveSnailUser user, String openId);
+    void saveSnailUser(SaveSnailUser user, String code);
 }

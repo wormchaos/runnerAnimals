@@ -17,10 +17,6 @@
         )
     </select>
 
-    <update id="updateInfo" parameterType="com.wormchaos.entity.User" >
-        update t_user set nickname = #{nickname}, `arm_force` = #{armForce} where open_id = #{openId}
-    </update>
-
     <select id="getMaxUserId"  resultType="Long">
         SELECT max(user_id) FROM t_user
     </select>

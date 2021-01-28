@@ -15,7 +15,5 @@ public interface UserMapper extends BaseDao<User> {
 
     Integer getRankOrderByForce(String openId);
 
-    Integer updateInfo(User user);
-
     Long getMaxUserId();
 }

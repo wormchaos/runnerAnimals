@@ -21,4 +21,18 @@ public interface UserService {
      * @return
      */
     List<User> getUserList();
+
+    /**
+     * 获取新户
+     * @param openId
+     */
+    void userLogin(String code, String openId);
+
+    /**
+     * 获取用户openId
+     * @param code
+     * @return
+     */
+    String getOpenId(String code);
+
 }

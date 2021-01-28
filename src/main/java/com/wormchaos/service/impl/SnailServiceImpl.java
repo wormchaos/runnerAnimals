@@ -1,10 +1,15 @@
 package com.wormchaos.service.impl;
 
+import com.wormchaos.controller.exception.MyException;
+import com.wormchaos.dao.SnailMapper;
 import com.wormchaos.dao.UserMapper;
+import com.wormchaos.dao.WxUserMapper;
 import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
+import com.wormchaos.entity.Snail;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.SnailService;
+import com.wormchaos.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,19 +22,40 @@ public class SnailServiceImpl implements SnailService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private WxUserMapper wxUserMapper;
+
+    @Resource
+    private SnailMapper snailMapper;
+
+    @Resource
+    private UserService userService;
+
     @Override
-    public SnailUserRsp getUserInfo(String openId) {
+    public SnailUserRsp getUserInfo(String code) {
         SnailUserRsp rsp = new SnailUserRsp();
+        String openId = wxUserMapper.findOpenIdByCode(code);
+        if (null == openId) {
+            throw new MyException("用户信息获取异常");
+        }
+        // 找到用户
         User user = userMapper.getUserByOpenId(openId);
-        if (null == user) {
+        if (null == user || null == user.getUserId()) {
+            rsp.setStatus(0);
+            return rsp;
+        }
+        // 查询蜗牛是否绑定
+        Snail snail = snailMapper.findByUserId(user.getUserId());
+        if (null == snail) {
             rsp.setStatus(0);
             return rsp;
         }
         rsp.setStatus(1);
-        rsp.setForce(user.getArmForce());
+        rsp.setForce(snail.getArmForce());
         // 查询排名
         rsp.setGroupRank(getRankOrderByForce(openId));
-        rsp.setNickname(user.getNickname());
+        rsp.setNickname(snail.getNickname());
         if (null != rsp.getGroupRank()) {
             if (rsp.getGroupRank() > 25) {
                 rsp.setGroupName("勘探组");
@@ -46,23 +72,29 @@ public class SnailServiceImpl implements SnailService {
     }
 
     @Override
-    public void saveSnailUser(SaveSnailUser reqInfo, String openId) {
+    public void saveSnailUser(SaveSnailUser reqInfo, String code) {
+        String openId = wxUserMapper.findOpenIdByCode(code);
+        if (null == openId) {
+            throw new MyException("用户信息获取异常");
+        }
+        // 找到用户
         User user = userMapper.getUserByOpenId(openId);
-        if(null == user) {
-            user = new User();
-            user.setOpenId(openId);
-            user.setArmForce(reqInfo.getForce());
-            user.setNickname(reqInfo.getNickname());
-            user.setUserId(createUserId());
-            userMapper.insert(user);
+        if (null == user || null == user.getUserId()) {
+            userService.userLogin(code, openId);
+            user = userMapper.getUserByOpenId(openId);
+        }
+        Snail snail = snailMapper.findByUserId(user.getUserId());
+        if(null == snail) {
+            snail = new Snail();
+            snail.setUserId(user.getUserId());
+            snail.setArmForce(reqInfo.getForce());
+            snail.setNickname(reqInfo.getNickname());
+            snailMapper.insert(snail);
         } else {
-            user.setArmForce(reqInfo.getForce());
-            user.setNickname(reqInfo.getNickname());
-            userMapper.updateInfo(user);
+            snail.setArmForce(reqInfo.getForce());
+            snail.setNickname(reqInfo.getNickname());
+            snailMapper.updateInfo(snail);
         }
     }
 
-    private Long createUserId() {
-        return userMapper.getMaxUserId() + 1;
-    }
 }

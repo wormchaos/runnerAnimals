@@ -1,4 +1,4 @@
-package com.wormchaos.controller;
+package com.wormchaos.controller.exception;
 
 import com.wormchaos.dto.rsp.BaseRsp;
 import org.slf4j.Logger;
@@ -16,6 +16,14 @@ public class AOJExceptionHandler {
 
     Logger LOGGER = LoggerFactory.getLogger(AOJExceptionHandler.class);
 
+    @ExceptionHandler(value={MyException.class})
+    @ResponseBody
+    public BaseRsp arithmeticExceptionHandle(MyException e) {
+        LOGGER.info("系统异常抛出", e);
+        BaseRsp mv = BaseRsp.FAILED;
+        mv.setDesc(e.getMsg());
+        return mv;
+    }
     @ExceptionHandler(value={Exception.class})
     @ResponseBody
     public BaseRsp arithmeticExceptionHandle(Exception e) {
