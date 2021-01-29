@@ -11,4 +11,9 @@
         update t_snail set nickname = #{nickname}, `arm_force` = #{armForce} where user_id = #{userId}
     </update>
 
+    <select id="rankByGroupId" parameterType="Integer" resultMap="getMap">
+        select user_id, nickname, arm_force from t_snail where group_id = #{groupId} order by arm_force desc
+    </select>
+
+
 </mapper>

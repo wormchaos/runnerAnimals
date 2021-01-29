@@ -2,6 +2,7 @@ package com.wormchaos.controller;
 
 import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.BaseRsp;
+import com.wormchaos.dto.rsp.snail.SnailRankRsp;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
 import com.wormchaos.service.SnailService;
 import org.omg.PortableInterceptor.USER_EXCEPTION;
@@ -46,6 +47,20 @@ public class SnailController {
         snailService.saveSnailUser(user, code);
         // 已入库用户显示昵称以及物种分组
         return BaseRsp.SUCCESS;
+    }
+
+    /**
+     * 获取当前用户资料
+     * @return
+     */
+    @RequestMapping(value = "getRankList")
+    public BaseRsp<SnailRankRsp> getRankList(@RequestParam(required = false) String code) {
+        // 判断是否已入库用户
+        List<SnailRankRsp> rankList = snailService.getRankListByGroupId(code, 1);
+        BaseRsp<SnailRankRsp> rsp = BaseRsp.SUCCESS;
+        rsp.setData(rankList);
+        // 已入库用户显示昵称以及物种分组
+        return rsp;
     }
 
 }

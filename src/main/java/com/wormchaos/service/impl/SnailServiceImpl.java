@@ -5,14 +5,18 @@ import com.wormchaos.dao.SnailMapper;
 import com.wormchaos.dao.UserMapper;
 import com.wormchaos.dao.WxUserMapper;
 import com.wormchaos.dto.req.snail.SaveSnailUser;
+import com.wormchaos.dto.rsp.snail.SnailRankRsp;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
 import com.wormchaos.entity.Snail;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.SnailService;
 import com.wormchaos.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Raytine on 2021/1/23.
@@ -84,7 +88,7 @@ public class SnailServiceImpl implements SnailService {
             user = userMapper.getUserByOpenId(openId);
         }
         Snail snail = snailMapper.findByUserId(user.getUserId());
-        if(null == snail) {
+        if (null == snail) {
             snail = new Snail();
             snail.setUserId(user.getUserId());
             snail.setArmForce(reqInfo.getForce());
@@ -95,6 +99,46 @@ public class SnailServiceImpl implements SnailService {
             snail.setNickname(reqInfo.getNickname());
             snailMapper.updateInfo(snail);
         }
+    }
+
+    @Override
+    public List<SnailRankRsp> getRankListByGroupId(String code, Integer groupId) {
+
+//        String openId = wxUserMapper.findOpenIdByCode(code);
+//        if (null == openId) {
+//            throw new MyException("请登录");
+//        }
+//        // 找到用户
+//        User user = userMapper.getUserByOpenId(openId);
+//        if (null == user || null == user.getUserId()) {
+//            throw new MyException("请登录");
+//        }
+        // TODO
+        User user = new User();
+        user.setUserId(6L);
+
+        List<Snail> rankList = snailMapper.rankByGroupId(groupId);
+        List<SnailRankRsp> rsp = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(rankList)) {
+            Integer rank = 0;
+            for (Snail s : rankList) {
+                SnailRankRsp r = new SnailRankRsp();
+                rank++;
+                r.setNickname(s.getNickname());
+                r.setForce(s.getArmForce());
+                r.setGroupRank(rank);
+                if (null != s.getArmForce()) {
+                    if (rank > 25) {
+                        r.setGroupName("勘探");
+                    } else {
+                        r.setGroupName("敢死");
+                    }
+                }
+                r.setBold(user.getUserId() == s.getUserId());
+                rsp.add(r);
+            }
+        }
+        return rsp;
     }
 
 }
