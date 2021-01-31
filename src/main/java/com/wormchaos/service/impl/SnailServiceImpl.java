@@ -56,7 +56,8 @@ public class SnailServiceImpl implements SnailService {
         rsp.setForce(snail.getArmForce());
         // 查询排名
         Integer rank = snailMapper.getRankByForce(userId);
-        if (null != rsp.getGroupRank()) {
+        if (null != rank) {
+            rsp.setGroupRank(String.valueOf(rank));
             if (rank > 25) {
                 rsp.setGroupName("勘探组");
             } else {
