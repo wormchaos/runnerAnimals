@@ -29,7 +29,7 @@ public class SnailUserRsp implements Serializable {
     /**
      * 排名
      */
-    private Integer groupRank;
+    private String groupRank;
 
     /**
      * 所属分组

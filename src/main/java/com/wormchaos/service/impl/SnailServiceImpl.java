@@ -55,43 +55,20 @@ public class SnailServiceImpl implements SnailService {
         rsp.setStatus(1);
         rsp.setForce(snail.getArmForce());
         // 查询排名
-        rsp.setGroupRank(snailMapper.getRankByForce(userId));
-        rsp.setNickname(snail.getNickname());
+        Integer rank = snailMapper.getRankByForce(userId);
         if (null != rsp.getGroupRank()) {
-            if (rsp.getGroupRank() > 25) {
+            if (rank > 25) {
                 rsp.setGroupName("勘探组");
             } else {
-                rsp.setGroupName("战斗组");
+                rsp.setGroupName("敢死组");
             }
+        } else {
+            rsp.setGroupName("-");
+            rsp.setGroupRank("-");
         }
+        rsp.setNickname(snail.getNickname());
         return rsp;
     }
-
-//    @Override
-//    public void saveSnailUser(SaveSnailUser reqInfo, String code) {
-//        String openId = wxUserMapper.findOpenIdByCode(code);
-//        if (null == openId) {
-//            throw new MyException("用户信息获取异常");
-//        }
-//        // 找到用户
-//        User user = userMapper.getUserByOpenId(openId);
-//        if (null == user || null == user.getUserId()) {
-//            userService.userLogin(code, openId);
-//            user = userMapper.getUserByOpenId(openId);
-//        }
-//        Snail snail = snailMapper.findByUserId(user.getUserId());
-//        if (null == snail) {
-//            snail = new Snail();
-//            snail.setUserId(user.getUserId());
-//            snail.setArmForce(reqInfo.getForce());
-//            snail.setNickname(reqInfo.getNickname());
-//            snailMapper.insert(snail);
-//        } else {
-//            snail.setArmForce(reqInfo.getForce());
-//            snail.setNickname(reqInfo.getNickname());
-//            snailMapper.updateInfo(snail);
-//        }
-//    }
 
     @Override
     public List<SnailRankRsp> getRankListByGroupId(Long userId, Integer groupId) {
@@ -103,8 +80,12 @@ public class SnailServiceImpl implements SnailService {
                 SnailRankRsp r = new SnailRankRsp();
                 rank++;
                 r.setNickname(s.getNickname());
-                r.setForce(s.getArmForce());
-                r.setGroupRank(rank);
+                if (null != s.getArmForce()) {
+                    r.setForce(String.valueOf(s.getArmForce()));
+                } else {
+                    r.setForce("-");
+                }
+//                r.setGroupRank(rank);
                 if (null != s.getArmForce()) {
                     if (rank > 25) {
                         r.setGroupName("勘探");
@@ -112,7 +93,12 @@ public class SnailServiceImpl implements SnailService {
                         r.setGroupName("敢死");
                     }
                 }
-                r.setBold(userId == s.getUserId());
+                if (null == s.getUserId()) {
+                    r.setBind(false);
+                } else {
+                    r.setBind(true);
+                    r.setBold(userId == s.getUserId());
+                }
                 rsp.add(r);
             }
         }
@@ -142,6 +128,15 @@ public class SnailServiceImpl implements SnailService {
             }
         }
         return rsp;
+    }
+
+    @Override
+    public void updateForce(SaveSnailUser user, Long userId) {
+        Snail snail = new Snail();
+        snail.setUserId(userId);
+        snail.setNickname(user.getNickname());
+        snail.setArmForce(user.getForce());
+        snailMapper.updateInfo(snail);
     }
 
 }

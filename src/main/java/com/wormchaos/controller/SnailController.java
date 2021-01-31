@@ -27,6 +27,7 @@ public class SnailController extends BaseController {
 
     /**
      * 获取当前用户资料
+     *
      * @return
      */
     @RequestMapping(value = "getSnailUserStatus")
@@ -52,7 +53,22 @@ public class SnailController extends BaseController {
 //    }
 
     /**
+     * 更新兵种战力
+     * @param user
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "updateForce")
+    public BaseRsp updateForce(@RequestBody SaveSnailUser user, @RequestParam(required = false) String token) {
+        Long userId = getUserIdWithCheck(token);
+        snailService.updateForce(user, userId);
+        // 已入库用户显示昵称以及物种分组
+        return BaseRsp.SUCCESS;
+    }
+
+    /**
      * 获取当前用户资料
+     *
      * @return
      */
     @RequestMapping(value = "getRankList")
@@ -67,6 +83,7 @@ public class SnailController extends BaseController {
 
     /**
      * 获取未绑定用户信息
+     *
      * @return
      */
     @RequestMapping(value = "getUnbindUserList")
@@ -80,6 +97,7 @@ public class SnailController extends BaseController {
 
     /**
      * 绑定蜗牛账号
+     *
      * @return
      */
     @RequestMapping(value = "bindSnail")

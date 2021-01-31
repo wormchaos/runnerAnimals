@@ -3,6 +3,7 @@ package com.wormchaos.dao;
 import com.wormchaos.dao.utils.BaseDao;
 import com.wormchaos.entity.User;
 import com.wormchaos.entity.WxUser;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * Created by Raytine on 2021/1/28.
@@ -26,6 +27,8 @@ public interface WxUserMapper extends BaseDao<WxUser> {
     // replace by insert
 //    void saveUser(String openId, String code);
 
-    void updateUser(String openId, String code, String token);
+    void updateUser(@Param(value = "openId") String openId,
+                    @Param(value = "code") String code,
+                    @Param(value = "token") String token);
 
 }

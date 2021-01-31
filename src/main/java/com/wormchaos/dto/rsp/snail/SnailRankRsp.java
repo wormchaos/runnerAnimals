@@ -18,12 +18,12 @@ public class SnailRankRsp implements Serializable {
     /**
      * 兵种强度
      */
-    private Integer force;
-
-    /**
-     * 排名
-     */
-    private Integer groupRank;
+    private String force;
+//
+//    /**
+//     * 排名
+//     */
+//    private String groupRank;
 
     /**
      * 所属分组
@@ -34,5 +34,10 @@ public class SnailRankRsp implements Serializable {
      * 是否着重标记
      */
     private boolean isBold;
+
+    /**
+     * 是否已綁定
+     */
+    private boolean isBind;
 
 }

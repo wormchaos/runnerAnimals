@@ -1,5 +1,12 @@
 -- 根据code登录，获取token
+http://127.0.0.1:8080/wechatLogin?token=03fdaf921bc324a579fde1dabeb5e4c3
+{"code":1,"desc":null,"data":null,"token":"03fdaf921bc324a579fde1dabeb5e4c3"}
 
+-- 检查未绑定用户
+http://127.0.0.1:8080/getUnbindUserList?token=03fdaf921bc324a579fde1dabeb5e4c3
 
 -- 绑定
 http://127.0.0.1:8080/bindSnail?token=e32226385e0474fec99d2515c8592a8e&bindId=1
+
+-- 查看排名
+http://127.0.0.1:8080/getRankList?token=03fdaf921bc324a579fde1dabeb5e4c3

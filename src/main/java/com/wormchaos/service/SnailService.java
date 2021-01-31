@@ -23,4 +23,6 @@ public interface SnailService {
     void bindSnail(Long userId, Long bindId);
 
     List<UnbindSnailRsp> getUnbindUserList(Integer groupId);
+
+    void updateForce(SaveSnailUser user, Long userId);
 }

@@ -37,7 +37,7 @@ public class WechatController extends BaseController {
         }
         if (null == openId) {
             BaseRsp rsp = BaseRsp.FAILED;
-            rsp.setDesc("登陆状态失效");
+            rsp.setDesc("请勿重复提交");
             return rsp;
         }
         // 保存openId
