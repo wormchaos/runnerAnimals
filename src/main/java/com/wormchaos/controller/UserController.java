@@ -25,7 +25,7 @@ public class UserController extends BaseController {
      */
     @GetMapping
     public String getUserInfo() {
-        Long userId = getUserId();
+        Long userId = getUserId("test");
         User user = userService.getUser(userId);
         return JSONObject.toJSONString(user);
     }

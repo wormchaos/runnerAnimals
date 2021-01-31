@@ -26,13 +26,19 @@ public interface UserService {
      * 获取新户
      * @param openId
      */
-    void userLogin(String code, String openId);
+    String userLogin(String code, String openId);
 
     /**
      * 获取用户openId
-     * @param code
+     * @param token
      * @return
      */
-    String getOpenId(String code);
+    String getOpenIdByToken(String token);
 
+    /**
+     * 获取用户信息
+     * @param openId
+     * @return
+     */
+    Long getUserIdByOpenId(String openId);
 }

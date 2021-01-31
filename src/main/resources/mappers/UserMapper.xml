@@ -6,16 +6,10 @@
     <select id="getUserByUserId" parameterType="Long" resultMap="getMap">
         SELECT * FROM t_user WHERE user_id = #{userId} limit 1
     </select>
-
     <select id="getUserByOpenId" parameterType="String" resultMap="getMap">
         SELECT * FROM t_user WHERE open_id = #{openId} limit 1
     </select>
 
-    <select id="getRankOrderByForce" parameterType="String" resultType="Integer">
-        select count(1) + 1 from t_user where `arm_force` > (
-        select `arm_force` from t_user where open_id = #{openId}
-        )
-    </select>
 
     <select id="getMaxUserId"  resultType="Long">
         SELECT max(user_id) FROM t_user

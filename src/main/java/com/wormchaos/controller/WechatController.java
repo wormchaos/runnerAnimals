@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 @RestController
 @Slf4j
-public class WechatController {
+public class WechatController extends BaseController {
 
     @Resource
     private UserService userService;
@@ -41,8 +41,10 @@ public class WechatController {
             return rsp;
         }
         // 保存openId
-        userService.userLogin(code, openId);
-        return BaseRsp.SUCCESS;
+        String token = userService.userLogin(code, openId);
+        BaseRsp rsp = BaseRsp.SUCCESS;
+        rsp.setToken(token);
+        return rsp;
     }
 
     /**
@@ -50,21 +52,8 @@ public class WechatController {
      * @return
      */
     @RequestMapping(value = "checkLogin")
-    public BaseRsp checkLogin(@RequestParam() String code) {
-        String openId = null;
-        try {
-            openId = HttpUtils.getOpenId(code);
-        } catch (IOException e) {
-            log.error("获取openId失败", e);
-            return BaseRsp.FAILED;
-        }
-        if (null == openId) {
-            BaseRsp rsp = BaseRsp.FAILED;
-            rsp.setDesc("登陆状态失效");
-            return rsp;
-        }
-        // 保存openId
-        userService.userLogin(code, openId);
+    public BaseRsp checkLogin(@RequestParam String token) {
+        getUserIdWithCheck(token);
         return BaseRsp.SUCCESS;
     }
 }

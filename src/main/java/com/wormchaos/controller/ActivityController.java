@@ -44,7 +44,7 @@ public class ActivityController extends BaseController {
      */
     @RequestMapping(value = "getActivityList")
     public List<ActivityRsp> getActivityList() {
-        Long userId = getUserId();
+        Long userId = getUserId("test");
         List<ActivityRsp> rsp = activityService.getActivityList(userId);
         return rsp;
     }
@@ -55,7 +55,7 @@ public class ActivityController extends BaseController {
      */
     @RequestMapping(value = "addActivity")
     public String addActivity(@RequestBody AddActivityReq req) {
-        Long userId = getUserId();
+        Long userId = getUserId("test");
         // TODO 检测用户是否具有开户权限
         activityService.addActivity(userId, req);
         return "success";

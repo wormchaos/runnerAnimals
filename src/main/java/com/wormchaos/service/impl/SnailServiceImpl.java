@@ -7,6 +7,7 @@ import com.wormchaos.dao.WxUserMapper;
 import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.snail.SnailRankRsp;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
+import com.wormchaos.dto.rsp.snail.UnbindSnailRsp;
 import com.wormchaos.entity.Snail;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.SnailService;
@@ -37,20 +38,16 @@ public class SnailServiceImpl implements SnailService {
     private UserService userService;
 
     @Override
-    public SnailUserRsp getUserInfo(String code) {
+    public SnailUserRsp getUserInfo(Long userId) {
         SnailUserRsp rsp = new SnailUserRsp();
-        String openId = wxUserMapper.findOpenIdByCode(code);
-        if (null == openId) {
-            throw new MyException("用户信息获取异常");
-        }
         // 找到用户
-        User user = userMapper.getUserByOpenId(openId);
-        if (null == user || null == user.getUserId()) {
+        User user = userMapper.getUserByUserId(userId);
+        if (null == user) {
             rsp.setStatus(0);
             return rsp;
         }
         // 查询蜗牛是否绑定
-        Snail snail = snailMapper.findByUserId(user.getUserId());
+        Snail snail = snailMapper.findByUserId(userId);
         if (null == snail) {
             rsp.setStatus(0);
             return rsp;
@@ -58,7 +55,7 @@ public class SnailServiceImpl implements SnailService {
         rsp.setStatus(1);
         rsp.setForce(snail.getArmForce());
         // 查询排名
-        rsp.setGroupRank(getRankOrderByForce(openId));
+        rsp.setGroupRank(snailMapper.getRankByForce(userId));
         rsp.setNickname(snail.getNickname());
         if (null != rsp.getGroupRank()) {
             if (rsp.getGroupRank() > 25) {
@@ -70,53 +67,34 @@ public class SnailServiceImpl implements SnailService {
         return rsp;
     }
 
-    @Override
-    public Integer getRankOrderByForce(String openId) {
-        return userMapper.getRankOrderByForce(openId);
-    }
-
-    @Override
-    public void saveSnailUser(SaveSnailUser reqInfo, String code) {
-        String openId = wxUserMapper.findOpenIdByCode(code);
-        if (null == openId) {
-            throw new MyException("用户信息获取异常");
-        }
-        // 找到用户
-        User user = userMapper.getUserByOpenId(openId);
-        if (null == user || null == user.getUserId()) {
-            userService.userLogin(code, openId);
-            user = userMapper.getUserByOpenId(openId);
-        }
-        Snail snail = snailMapper.findByUserId(user.getUserId());
-        if (null == snail) {
-            snail = new Snail();
-            snail.setUserId(user.getUserId());
-            snail.setArmForce(reqInfo.getForce());
-            snail.setNickname(reqInfo.getNickname());
-            snailMapper.insert(snail);
-        } else {
-            snail.setArmForce(reqInfo.getForce());
-            snail.setNickname(reqInfo.getNickname());
-            snailMapper.updateInfo(snail);
-        }
-    }
-
-    @Override
-    public List<SnailRankRsp> getRankListByGroupId(String code, Integer groupId) {
-
+//    @Override
+//    public void saveSnailUser(SaveSnailUser reqInfo, String code) {
 //        String openId = wxUserMapper.findOpenIdByCode(code);
 //        if (null == openId) {
-//            throw new MyException("请登录");
+//            throw new MyException("用户信息获取异常");
 //        }
 //        // 找到用户
 //        User user = userMapper.getUserByOpenId(openId);
 //        if (null == user || null == user.getUserId()) {
-//            throw new MyException("请登录");
+//            userService.userLogin(code, openId);
+//            user = userMapper.getUserByOpenId(openId);
 //        }
-        // TODO
-        User user = new User();
-        user.setUserId(6L);
+//        Snail snail = snailMapper.findByUserId(user.getUserId());
+//        if (null == snail) {
+//            snail = new Snail();
+//            snail.setUserId(user.getUserId());
+//            snail.setArmForce(reqInfo.getForce());
+//            snail.setNickname(reqInfo.getNickname());
+//            snailMapper.insert(snail);
+//        } else {
+//            snail.setArmForce(reqInfo.getForce());
+//            snail.setNickname(reqInfo.getNickname());
+//            snailMapper.updateInfo(snail);
+//        }
+//    }
 
+    @Override
+    public List<SnailRankRsp> getRankListByGroupId(Long userId, Integer groupId) {
         List<Snail> rankList = snailMapper.rankByGroupId(groupId);
         List<SnailRankRsp> rsp = new ArrayList<>();
         if (!CollectionUtils.isEmpty(rankList)) {
@@ -134,7 +112,32 @@ public class SnailServiceImpl implements SnailService {
                         r.setGroupName("敢死");
                     }
                 }
-                r.setBold(user.getUserId() == s.getUserId());
+                r.setBold(userId == s.getUserId());
+                rsp.add(r);
+            }
+        }
+        return rsp;
+    }
+
+    @Override
+    public void bindSnail(Long userId, Long bindId) {
+        // 检查是否已绑定
+        if(null != snailMapper.findByUserId(userId)) {
+            throw new MyException("您已绑定账号");
+        }
+        // 绑定
+        snailMapper.bindSnail(userId, bindId);
+    }
+
+    @Override
+    public List<UnbindSnailRsp> getUnbindUserList(Integer groupId) {
+        List<Snail> snails = snailMapper.rankByGroupId(groupId);
+        List<UnbindSnailRsp> rsp = new ArrayList<>();
+        for (Snail s : snails) {
+            if (null == s.getUserId()) {
+                UnbindSnailRsp r = new UnbindSnailRsp();
+                r.setBindId(s.getId());
+                r.setNickname(s.getNickname());
                 rsp.add(r);
             }
         }

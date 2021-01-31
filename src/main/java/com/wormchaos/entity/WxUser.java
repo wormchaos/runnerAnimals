@@ -23,6 +23,11 @@ public class WxUser {
     private String code;
 
     /**
+     * 后台生成token
+     */
+    private String token;
+
+    /**
      * 用户上次登陆时间
      */
     private Date updateTime;

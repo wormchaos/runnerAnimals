@@ -3,12 +3,12 @@
 <mapper namespace="com.wormchaos.dao.WxUserMapper">
     <resultMap id="getMap" type="com.wormchaos.entity.WxUser"/>
 
-    <select id="findOpenIdByCode" parameterType="String" resultType="String">
-        SELECT open_id FROM t_wx_user WHERE code = #{code} limit 1
+    <select id="findOpenIdByToken" parameterType="String" resultType="String">
+        SELECT open_id FROM t_wx_user WHERE token = #{token} limit 1
     </select>
 
     <update id="updateUser" >
-        update t_wx_user set code = #{code} where open_id = #{openId}
+        update t_wx_user set code = #{code}, token = #{token} where open_id = #{openId}
     </update>
 
     <select id="isExists" parameterType="String" resultType="Integer">

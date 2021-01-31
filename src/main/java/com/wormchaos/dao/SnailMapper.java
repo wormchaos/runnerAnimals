@@ -2,6 +2,7 @@ package com.wormchaos.dao;
 
 import com.wormchaos.dao.utils.BaseDao;
 import com.wormchaos.entity.Snail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +30,18 @@ public interface SnailMapper extends BaseDao<Snail> {
      * @return
      */
     List<Snail> rankByGroupId(Integer groupId);
+
+    /**
+     * 绑定用户
+     * @param userId
+     * @param bindId
+     */
+    void bindSnail(@Param(value = "userId") Long userId, @Param(value = "bindId")Long bindId);
+
+    /**
+     * 根据领导力获取排名
+     * @param userId
+     * @return
+     */
+    Integer getRankByForce(Long userId);
 }

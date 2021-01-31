@@ -1,0 +1,5 @@
+-- 根据code登录，获取token
+
+
+-- 绑定
+http://127.0.0.1:8080/bindSnail?token=e32226385e0474fec99d2515c8592a8e&bindId=1

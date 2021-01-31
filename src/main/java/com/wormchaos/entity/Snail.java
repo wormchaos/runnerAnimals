@@ -12,6 +12,11 @@ import javax.persistence.Table;
 public class Snail {
 
     /**
+     * id
+     */
+    private Long id;
+
+    /**
      * 用户ID
      */
     private Long userId;

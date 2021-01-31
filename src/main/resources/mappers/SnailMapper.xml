@@ -12,7 +12,17 @@
     </update>
 
     <select id="rankByGroupId" parameterType="Integer" resultMap="getMap">
-        select user_id, nickname, arm_force from t_snail where group_id = #{groupId} order by arm_force desc
+        select id, user_id, nickname, arm_force from t_snail where group_id = #{groupId} order by arm_force desc
+    </select>
+
+    <update id="bindSnail" parameterType="Long">
+        update t_snail set user_id = #{userId} where id = #{bindId} and user_id is NULL
+    </update>
+
+    <select id="getRankByForce" parameterType="Long" resultMap="getMap">
+        select count(1) + 1 from t_snail where `arm_force` > (
+          select `arm_force` from t_snail where user_id = #{userId}
+        ) and user_id is not null
     </select>
 
 

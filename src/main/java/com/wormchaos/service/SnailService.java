@@ -3,6 +3,7 @@ package com.wormchaos.service;
 import com.wormchaos.dto.req.snail.SaveSnailUser;
 import com.wormchaos.dto.rsp.snail.SnailRankRsp;
 import com.wormchaos.dto.rsp.snail.SnailUserRsp;
+import com.wormchaos.dto.rsp.snail.UnbindSnailRsp;
 
 import java.util.List;
 
@@ -11,11 +12,15 @@ import java.util.List;
  */
 public interface SnailService {
 
-    SnailUserRsp getUserInfo(String code);
+    SnailUserRsp getUserInfo(Long userId);
 
-    Integer getRankOrderByForce(String openId);
+//    Integer getRankOrderByForce(String openId);
+//
+//    void saveSnailUser(SaveSnailUser user, String code);
 
-    void saveSnailUser(SaveSnailUser user, String code);
+    List<SnailRankRsp> getRankListByGroupId(Long userId, Integer groupId);
 
-    List<SnailRankRsp> getRankListByGroupId(String code, Integer groupId);
+    void bindSnail(Long userId, Long bindId);
+
+    List<UnbindSnailRsp> getUnbindUserList(Integer groupId);
 }

@@ -17,6 +17,8 @@ public class BaseRsp<T> {
 
     private List<T> data;
 
+    private String token;
+
     public BaseRsp(Integer code) {
         this.code = code;
     }
