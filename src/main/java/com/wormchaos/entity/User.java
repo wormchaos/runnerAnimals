@@ -39,6 +39,6 @@ public class User {
     /**
      * 是否允许消息推送
      */
-    private Integer allowMsg;
+    private Integer allowMessage;
 
 }

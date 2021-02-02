@@ -100,7 +100,7 @@ public class SnailController extends BaseController {
     public BaseRsp<SnailRankRsp> getRankList(@RequestParam(required = false) String token) {
         Long userId = getUserIdWithCheck(token);
         List<SnailRankRsp> rankList = snailService.getRankListByGroupId(userId, 1);
-        BaseRsp<SnailRankRsp> rsp = BaseRsp.SUCCESS;
+        BaseRsp<SnailRankRsp> rsp = new BaseRsp(1);
         rsp.setData(rankList);
         // 已入库用户显示昵称以及物种分组
         return rsp;
@@ -115,7 +115,7 @@ public class SnailController extends BaseController {
     public BaseRsp<UnbindSnailRsp> getUnbindUserList(@RequestParam(required = false) String token, @RequestParam(defaultValue = "1") Integer groupId) {
         getUserIdWithCheck(token);
         List<UnbindSnailRsp> rankList = snailService.getUnbindUserList(groupId);
-        BaseRsp<UnbindSnailRsp> rsp = BaseRsp.SUCCESS;
+        BaseRsp<UnbindSnailRsp> rsp = new BaseRsp(1);
         rsp.setData(rankList);
         return rsp;
     }

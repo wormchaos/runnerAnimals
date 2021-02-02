@@ -42,7 +42,7 @@ public class WechatController extends BaseController {
         }
         // 保存openId
         String token = userService.userLogin(code, openId);
-        BaseRsp rsp = BaseRsp.SUCCESS;
+        BaseRsp rsp = new BaseRsp(1);
         rsp.setToken(token);
         return rsp;
     }

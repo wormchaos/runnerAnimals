@@ -81,7 +81,7 @@ public class SnailServiceImpl implements SnailService {
             rsp.setGroupName("-");
             rsp.setGroupRank("-");
         }
-        rsp.setAllowMessage(null != user.getAllowMsg() && user.getAllowMsg() == 1);
+        rsp.setAllowMessage(null != user.getAllowMessage() && user.getAllowMessage() == 1);
         return rsp;
     }
 
@@ -183,9 +183,11 @@ public class SnailServiceImpl implements SnailService {
             if (null != tempMap.get(u.getUserId())) {
                 Integer r = tempMap.get(u.getUserId());
                 String group = r > 25 ? "勘探组" : "敢死组";
-                String message = MessageFormat.format("您的组别:{0}", group);
+                String message = MessageFormat.format("您的排名: {0},您的组别: {1}", r, group);
                 try {
                     HttpUtils.sendTemplate(templateId, u.getOpenId(), accessToken, message);
+                    // 发送后更新状态
+                    userMapper.updateAllowMessage(u.getUserId(), 0);
                 } catch (IOException e) {
                     log.error("失败", e);
                 }
