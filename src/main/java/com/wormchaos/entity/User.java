@@ -26,14 +26,19 @@ public class User {
      */
     private String openId;
 
-    /**
-     * 昵称
-     */
-    private String nickname;
+//    /**
+//     * 昵称
+//     */
+//    private String nickname;
+//
+//    /**
+//     * 兵种强度
+//     */
+//    private Integer armForce;
 
     /**
-     * 兵种强度
+     * 是否允许消息推送
      */
-    private Integer armForce;
+    private Integer allowMsg;
 
 }

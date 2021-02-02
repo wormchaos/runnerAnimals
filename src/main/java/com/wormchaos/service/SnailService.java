@@ -25,4 +25,8 @@ public interface SnailService {
     List<UnbindSnailRsp> getUnbindUserList(Integer groupId);
 
     void updateForce(SaveSnailUser user, Long userId);
+
+    void allowMessage(Long userId, Integer allowMessage);
+
+    void batchSendMessage();
 }

@@ -39,6 +39,18 @@ public class SnailController extends BaseController {
         return result;
     }
 
+    /**
+     * 允许用户推送消息
+     *
+     * @return
+     */
+    @RequestMapping(value = "allowMessage")
+    public BaseRsp allowMessage(@RequestParam String token, @RequestParam(defaultValue = "0") Integer allowMessage) {
+        Long userId = getUserIdWithCheck(token);
+        snailService.allowMessage(userId, allowMessage);
+        return BaseRsp.SUCCESS;
+    }
+
     // 统一用绑定的方式
 //    /**
 //     * 报错用户资料
@@ -52,6 +64,20 @@ public class SnailController extends BaseController {
 //        return BaseRsp.SUCCESS;
 //    }
 
+
+    /**
+     * 允许用户推送消息
+     *
+     * @return
+     */
+    @RequestMapping(value = "batchSendMessage")
+    public BaseRsp batchSendMessage(@RequestParam String code) {
+        if (code.equals("1ASDAS1WZ")) {
+            snailService.batchSendMessage();
+        }
+        return BaseRsp.SUCCESS;
+    }
+
     /**
      * 更新兵种战力
      * @param user
@@ -62,7 +88,6 @@ public class SnailController extends BaseController {
     public BaseRsp updateForce(@RequestBody SaveSnailUser user, @RequestParam(required = false) String token) {
         Long userId = getUserIdWithCheck(token);
         snailService.updateForce(user, userId);
-        // 已入库用户显示昵称以及物种分组
         return BaseRsp.SUCCESS;
     }
 

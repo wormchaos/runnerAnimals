@@ -12,17 +12,25 @@ import com.wormchaos.entity.Snail;
 import com.wormchaos.entity.User;
 import com.wormchaos.service.SnailService;
 import com.wormchaos.service.UserService;
+import com.wormchaos.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.protocol.HTTP;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Raytine on 2021/1/23.
  */
 @Service
+@Slf4j
 public class SnailServiceImpl implements SnailService {
 
     @Resource
@@ -36,6 +44,11 @@ public class SnailServiceImpl implements SnailService {
 
     @Resource
     private UserService userService;
+
+    /**
+     * 消息模版
+     */
+    private String templateId = "lh7TH0qHUII7jY5Gu3mPevd_XX-cIY1KfGccoktto-o";
 
     @Override
     public SnailUserRsp getUserInfo(Long userId) {
@@ -54,6 +67,7 @@ public class SnailServiceImpl implements SnailService {
         }
         rsp.setStatus(1);
         rsp.setForce(snail.getArmForce());
+        rsp.setNickname(snail.getNickname());
         // 查询排名
         Integer rank = snailMapper.getRankByForce(userId);
         if (null != rank) {
@@ -67,7 +81,7 @@ public class SnailServiceImpl implements SnailService {
             rsp.setGroupName("-");
             rsp.setGroupRank("-");
         }
-        rsp.setNickname(snail.getNickname());
+        rsp.setAllowMessage(null != user.getAllowMsg() && user.getAllowMsg() == 1);
         return rsp;
     }
 
@@ -78,6 +92,9 @@ public class SnailServiceImpl implements SnailService {
         if (!CollectionUtils.isEmpty(rankList)) {
             Integer rank = 0;
             for (Snail s : rankList) {
+                if (s.getUserId() == null) {
+                    continue;
+                }
                 SnailRankRsp r = new SnailRankRsp();
                 rank++;
                 r.setNickname(s.getNickname());
@@ -109,7 +126,7 @@ public class SnailServiceImpl implements SnailService {
     @Override
     public void bindSnail(Long userId, Long bindId) {
         // 检查是否已绑定
-        if(null != snailMapper.findByUserId(userId)) {
+        if (null != snailMapper.findByUserId(userId)) {
             throw new MyException("您已绑定账号");
         }
         // 绑定
@@ -138,6 +155,42 @@ public class SnailServiceImpl implements SnailService {
         snail.setNickname(user.getNickname());
         snail.setArmForce(user.getForce());
         snailMapper.updateInfo(snail);
+    }
+
+    @Override
+    public void allowMessage(Long userId, Integer allowMessage) {
+        userMapper.updateAllowMessage(userId, allowMessage);
+    }
+
+    @Override
+    public void batchSendMessage() {
+        Integer groupId = 1;
+        List<User> users = userMapper.getUsersByGroup(groupId);
+        Map<Long, Integer> tempMap = new HashMap<>();
+        List<Snail> rankList = snailMapper.rankByGroupId(groupId);
+        Integer rank = 0;
+        for (Snail s : rankList) {
+            rank++;
+            tempMap.put(s.getUserId(), rank);
+        }
+        String accessToken = null;
+        try {
+            accessToken = HttpUtils.getAccessToken();
+        } catch (IOException e) {
+            throw new MyException("获取accessToken失败");
+        }
+        for (User u : users) {
+            if (null != tempMap.get(u.getUserId())) {
+                Integer r = tempMap.get(u.getUserId());
+                String group = r > 25 ? "勘探组" : "敢死组";
+                String message = MessageFormat.format("您的组别:{0}", group);
+                try {
+                    HttpUtils.sendTemplate(templateId, u.getOpenId(), accessToken, message);
+                } catch (IOException e) {
+                    log.error("失败", e);
+                }
+            }
+        }
     }
 
 }

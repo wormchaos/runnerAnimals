@@ -36,4 +36,9 @@ public class SnailUserRsp implements Serializable {
      */
     private String groupName;
 
+    /**
+     * 是否允许推送消息
+     */
+    private boolean allowMessage;
+
 }
