@@ -67,8 +67,9 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.30</version>
-            <!--<version>8.0.16</version>-->
+            <!--分别对应mysql5及以上版本-->
+            <!--<version>5.1.30</version>-->
+            <version>8.0.16</version>
         </dependency>
 
         <dependency>
@@ -100,6 +101,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.9</version>
         </dependency>
 
     </dependencies>
