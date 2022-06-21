@@ -69,7 +69,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <!--分别对应mysql5及以上版本-->
             <!--<version>5.1.30</version>-->
-            <version>8.0.16</version>
+            <version>8.0.28</version>
         </dependency>
 
         <dependency>
